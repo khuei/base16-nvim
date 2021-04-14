@@ -1,0 +1,10 @@
+sources
+schemes
+sources.yaml
+
+templates/*
+
+!/templates/vim
+!/templates/lua
+
+.venv
