@@ -6,5 +6,6 @@ templates/*
 
 !/templates/vim
 !/templates/lua
+!/templates/shell
 
 .venv
