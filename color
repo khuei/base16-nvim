@@ -1,0 +1,122 @@
+#!/bin/sh
+
+usage() {
+	cat <<- EOF
+	usage:
+	  color [colorscheme]
+	  color [command]
+
+	command:
+	  ls   -- List all colorschemes
+	  help -- Show help message
+	EOF
+}
+
+luma() {
+	COLOR_HEX="$1"
+
+	[ -n "$COLOR_HEX" ] || {
+		echo "Missing argument hex color (RRGGBB)" 1>&2
+		return 1
+	}
+
+	COLOR_HEX_RED=$(echo "$COLOR_HEX" | cut -c 1-2)
+	COLOR_HEX_GREEN=$(echo "$COLOR_HEX" | cut -c 3-4)
+	COLOR_HEX_BLUE=$(echo "$COLOR_HEX" | cut -c 5-6)
+
+	COLOR_DEC_RED=$(echo "ibase=16; $COLOR_HEX_RED" | bc)
+	COLOR_DEC_GREEN=$(echo "ibase=16; $COLOR_HEX_GREEN" | bc)
+	COLOR_DEC_BLUE=$(echo "ibase=16; $COLOR_HEX_BLUE" | bc)
+
+	COLOR_LUMA_RED=$(echo "0.2126 * $COLOR_DEC_RED" | bc)
+	COLOR_LUMA_GREEN=$(echo "0.7152 * $COLOR_DEC_GREEN" | bc)
+	COLOR_LUMA_BLUE=$(echo "0.0722 * $COLOR_DEC_BLUE" | bc)
+
+	COLOR_LUMA=$(echo "$COLOR_LUMA_RED + $COLOR_LUMA_GREEN + $COLOR_LUMA_BLUE" | bc)
+
+	echo "$COLOR_LUMA"
+}
+
+setup() {
+	SCHEME="$1"
+	FILE="$BASE16_DIR/base16-$SCHEME.sh"
+
+	[ -f "$FILE" ] || {
+		echo "Colorscheme \"$SCHEME\" not found in $BASE16_DIR" 1>&2
+		return 1
+	}
+
+	BG=$(grep color_background= "$FILE" | cut -d \" -f2 | sed -e 's#/##g')
+	LUMA=$(luma "$BG")
+
+	LIGHT="$(echo "$LUMA > 127.5" | bc)"
+	BACKGROUND=''
+
+	case "$LIGHT" in
+		0) BACKGROUND='dark' ;;
+		1) BACKGROUND='light' ;;
+	esac
+
+	[ -f "$BASE16_CONFIG" ] && \
+		cp "$BASE16_CONFIG" "$BASE16_CONFIG_PREVIOUS" >/dev/null
+
+	echo "$SCHEME" > "$BASE16_CONFIG"
+	echo "$BACKGROUND" >> "$BASE16_CONFIG"
+
+	sh "$FILE"
+
+	[ -n "$TMUX" ] || return 0
+
+	CC=$(grep color18= "$FILE" | cut -d \" -f2 | sed -e 's#/##g')
+
+	[ -n "$BG" ] && [ -n "$CC" ] || return 0
+
+	command tmux set -a window-active-style "bg=#$BG"
+	command tmux set -a window-style "bg=#$CC"
+	command tmux set -g pane-active-border-style "bg=#$CC"
+	command tmux set -g pane-border-style "bg=#$CC"
+}
+
+color() {
+	SCHEME="$1"
+	BASE16_DIR="$(dirname "$0")/shell"
+	BASE16_CONFIG=~/.base16
+	BASE16_CONFIG_PREVIOUS="$BASE16_CONFIG.previous"
+
+	case "$SCHEME" in
+	help)
+		usage
+		;;
+	ls)
+		find "$BASE16_DIR" -name 'base16-*.sh' | \
+		sed -E 's|.+/base16-||' | \
+		sed -E 's/\.sh//' | \
+		grep "${2:-.}" | \
+		sort | \
+		column
+		;;
+	-)
+		[ -s "$BASE16_CONFIG_PREVIOUS" ] || {
+			echo "warning: no previous config found at $BASE16_CONFIG_PREVIOUS" 1>&2
+			return 1
+		}
+
+		PREVIOUS_SCHEME="$(head -1 "$BASE16_CONFIG_PREVIOUS")"
+		setup "$PREVIOUS_SCHEME"
+		;;
+	'')
+		[ -s "$BASE16_CONFIG" ] || {
+			setup 'default-dark'
+			return 0
+		}
+
+		SCHEME="$(head -1 "$BASE16_CONFIG")"
+		setup "$SCHEME"
+		;;
+	*)
+		setup "$SCHEME"
+		;;
+	esac
+}
+
+color "$@"
