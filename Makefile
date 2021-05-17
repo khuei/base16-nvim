@@ -3,10 +3,7 @@
 REPO=$(shell pwd)
 TEMPLATE=$(shell basename ${REPO})
 
-all: update build
-
-update:
-	pybase16 update
+all: build
 
 build:
 	cp templates/vim/* templates
