@@ -1,7 +1,7 @@
 #!/bin/sh
 # base16-shell (https://github.com/chriskempson/base16-shell)
 # Base16 Shell template by Chris Kempson (http://chriskempson.com)
-# Rosé Pine Dawn scheme by Emilia Dunfelt &lt;sayhi@dunfelt.se&gt;
+# Rosé Pine Dawn scheme by Emilia Dunfelt <sayhi@dunfelt.se>
 
 color00="fa/f4/ed" # Base 00 - Black
 color01="1f/1d/2e" # Base 08 - Red
