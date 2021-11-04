@@ -1,7 +1,7 @@
 #!/bin/sh
 # base16-shell (https://github.com/chriskempson/base16-shell)
 # Base16 Shell template by Chris Kempson (http://chriskempson.com)
-# Ayu Mirage scheme by Khue Nguyen <Z5483Y@gmail.com>
+# Ayu Mirage scheme by Khue Nguyen (https://github.com/Z5483)
 
 color00="17/1B/24" # Base 00 - Black
 color01="F2/87/79" # Base 08 - Red

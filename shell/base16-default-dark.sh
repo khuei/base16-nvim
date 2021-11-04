@@ -3,30 +3,30 @@
 # Base16 Shell template by Chris Kempson (http://chriskempson.com)
 # Default Dark scheme by Chris Kempson (http://chriskempson.com)
 
-color00="#1/81/81" # Base 00 - Black
-color01="#a/b4/64" # Base 08 - Red
-color02="#a/1b/56" # Base 0B - Green
-color03="#f/7c/a8" # Base 0A - Yellow
-color04="#7/ca/fc" # Base 0D - Blue
-color05="#b/a8/ba" # Base 0E - Magenta
-color06="#8/6c/1b" # Base 0C - Cyan
-color07="#d/8d/8d" # Base 05 - White
-color08="#5/85/85" # Base 03 - Bright Black
+color00="18/18/18" # Base 00 - Black
+color01="ab/46/42" # Base 08 - Red
+color02="a1/b5/6c" # Base 0B - Green
+color03="f7/ca/88" # Base 0A - Yellow
+color04="7c/af/c2" # Base 0D - Blue
+color05="ba/8b/af" # Base 0E - Magenta
+color06="86/c1/b9" # Base 0C - Cyan
+color07="d8/d8/d8" # Base 05 - White
+color08="58/58/58" # Base 03 - Bright Black
 color09=$color01 # Base 08 - Bright Red
 color10=$color02 # Base 0B - Bright Green
 color11=$color03 # Base 0A - Bright Yellow
 color12=$color04 # Base 0D - Bright Blue
 color13=$color05 # Base 0E - Bright Magenta
 color14=$color06 # Base 0C - Bright Cyan
-color15="#f/8f/8f" # Base 07 - Bright White
-color16="#d/c9/65" # Base 09
-color17="#a/16/94" # Base 0F
-color18="#2/82/82" # Base 01
-color19="#3/83/83" # Base 02
-color20="#b/8b/8b" # Base 04
-color21="#e/8e/8e" # Base 06
-color_foreground="#d/8d/8d" # Base 05
-color_background="#1/81/81" # Base 00
+color15="f8/f8/f8" # Base 07 - Bright White
+color16="dc/96/56" # Base 09
+color17="a1/69/46" # Base 0F
+color18="28/28/28" # Base 01
+color19="38/38/38" # Base 02
+color20="b8/b8/b8" # Base 04
+color21="e8/e8/e8" # Base 06
+color_foreground="d8/d8/d8" # Base 05
+color_background="18/18/18" # Base 00
 
 if [ -n "$TMUX" ]; then
 	put_template() { printf '\033Ptmux;\033\033]4;%d;rgb:%s\033\033\\\033\\' "$@"; }
@@ -74,13 +74,13 @@ put_template 21 $color21
 
 # foreground / background / cursor color
 if [ -n "$ITERM_SESSION_ID" ]; then
-	put_template_custom Pg #d8d8d8 # foreground
-	put_template_custom Ph #181818 # background
-	put_template_custom Pi #d8d8d8 # bold color
-	put_template_custom Pj #383838 # selection color
-	put_template_custom Pk #d8d8d8 # selected text color
-	put_template_custom Pl #d8d8d8 # cursor
-	put_template_custom Pm #181818 # cursor text
+	put_template_custom Pg d8d8d8 # foreground
+	put_template_custom Ph 181818 # background
+	put_template_custom Pi d8d8d8 # bold color
+	put_template_custom Pj 383838 # selection color
+	put_template_custom Pk d8d8d8 # selected text color
+	put_template_custom Pl d8d8d8 # cursor
+	put_template_custom Pm 181818 # cursor text
 else
 	put_template_var 10 $color_foreground
 	if [ "$BASE16_SHELL_SET_BACKGROUND" != false ]; then
