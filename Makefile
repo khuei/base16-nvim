@@ -1,8 +1,8 @@
 .POSIX:
 
-all: get-cbase16 build
+all: get-builder build
 
-get-cbase16:
+get-builder:
 	test -f ./builder/cbase16.cpp || git clone https://github.com/base16-fork/cbase16 ./builder
 	make -C ./builder
 
@@ -15,4 +15,4 @@ build:
 	test -d shell || mkdir shell
 	mv ./templates/shell/shell/colors/* ./shell
 
-.PHONY: all get-cbase16 build commit
+.PHONY: all get-builder build
