@@ -1,0 +1,24 @@
+name: Update themes
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up GCC
+        uses: egor-tensin/setup-gcc@v1
+        with:
+          version: 11
+          platform: x64
+      - name: Install dependency libraries
+        run: sudo apt install -y libyaml-cpp-dev libgit2-dev
+      - name: Fetch the repository code
+        uses: actions/checkout@v2
+      - name: Run make
+        run: make
+      - name: Commit the changes, if any
+        uses: stefanzweifel/git-auto-commit-action@v4.1.1
+        with:
+          commit_message: "chore: update themes"
+          branch: ${{ github.head_ref }}
