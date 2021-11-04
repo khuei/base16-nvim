@@ -2,9 +2,9 @@ sources
 schemes
 sources.yaml
 
-templates/*
+templates/**
+builder/
 
-!/templates/vim
 !/templates/lua
 !/templates/shell
 
